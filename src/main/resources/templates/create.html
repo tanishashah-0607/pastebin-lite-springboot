@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h2>Create Paste</h2>
+
+<form id="pasteForm">
+    <textarea name="content" placeholder="Paste here" required></textarea><br><br>
+    <input name="ttl_seconds" placeholder="TTL (seconds)"><br><br>
+    <input name="max_views" placeholder="Max views"><br><br>
+    <button type="submit">Create</button>
+</form>
+
+<pre id="result"></pre>
+
+<script>
+    document.getElementById("pasteForm").onsubmit = async function(e) {
+        e.preventDefault();
+
+        const data = {
+            content: this.content.value,
+            ttl_seconds: this.ttl_seconds.value || null,
+            max_views: this.max_views.value || null
+        };
+
+        const res = await fetch("/api/pastes", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(data)
+        });
+
+        const json = await res.json();
+        document.getElementById("result").innerText = json.url;
+    };
+</script>
+
+</body>
+</html>
